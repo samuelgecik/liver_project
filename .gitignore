@@ -168,3 +168,5 @@ data_split/
 data_augmented/
 liver_p2/
 wandb/
+figures/
+checkpoints/
