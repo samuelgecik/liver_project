@@ -1,5 +1,3 @@
-Certainly. Here's a comprehensive documentation in Markdown format summarizing the first phase of your work:
-
 # Hepatocyte Ballooning Detection in Liver Ultrasound Images: Phase 1 Documentation
 
 ## Project Overview
