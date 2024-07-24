@@ -170,3 +170,8 @@ liver_p2/
 wandb/
 figures/
 checkpoints/
+adam/
+adamW/
+*.zip
+*.pth
+*.7z
