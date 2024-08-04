@@ -64,7 +64,8 @@ def calculate_double_dichotomy_auc(y_true, y_prob):
     abnormal_mask = y_true != 2
     if np.sum(abnormal_mask) > 0:  # Ensure there are abnormal cases
         y_few_vs_many = (y_true[abnormal_mask] == 1).astype(int)  # 1 is 'Many'
-        prob_few_vs_many = y_prob[abnormal_mask][:, 1] / y_prob[abnormal_mask][:, :2].sum(axis=1)
+        epsilon = 1e-15 # To avoid division by zero
+        prob_few_vs_many = y_prob[abnormal_mask][:, 1] / (y_prob[abnormal_mask][:, 0] + y_prob[abnormal_mask][:, 1] + epsilon)
         auc_few_vs_many = roc_auc_score(y_few_vs_many, prob_few_vs_many)
     else:
         auc_few_vs_many = np.nan
