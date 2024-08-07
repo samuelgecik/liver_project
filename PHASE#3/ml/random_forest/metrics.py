@@ -53,12 +53,19 @@ def custom_scorer(y_true, y_pred):
     # If y_pred is probabilities, convert to class predictions
     if y_pred.ndim == 2:
         y_pred_class = np.argmax(y_pred, axis=1)
+        auc = roc_auc_score(y_true, y_pred, average='macro', multi_class='ovo')
+        f1 = f1_score(y_true, y_pred_class, average='macro')
     else:
-        y_pred_class = y_pred
+        y_pred_class = (y_pred > 0.5).astype(int)
+        auc = roc_auc_score(y_true, y_pred)
+        f1 = f1_score(y_true, y_pred_class, average='binary')
+
+    # ind = np.random.randint(0, len(y_true), 20)
+    # print(y_pred[ind])
+    # print(y_pred_class[ind])
+    # print(y_true[ind])
 
     # Calculate metrics
-    auc = roc_auc_score(y_true, y_pred, average='macro', multi_class='ovo')
-    f1 = f1_score(y_true, y_pred_class, average='macro')
     kappa = cohen_kappa_score(y_true, y_pred_class)
     balanced_acc = balanced_accuracy_score(y_true, y_pred_class)
     
