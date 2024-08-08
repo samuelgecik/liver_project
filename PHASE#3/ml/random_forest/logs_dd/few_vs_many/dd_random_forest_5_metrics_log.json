@@ -1,0 +1,1 @@
+{"fold": 5, "val_accuracy": 0.9984484096198604, "val_auc": 0.9999031476997579, "val_f1": 0.9795918367346939, "avg_sensitivity": 0.98, "avg_specificity": 0.98, "class_Few_sensitivity": 1.0, "class_Many_sensitivity": 0.96, "class_Few_specificity": 0.96, "class_Many_specificity": 1.0, "class_Few_f1": 0.9795918367346939, "class_Many_f1": 0.9795918367346939}
