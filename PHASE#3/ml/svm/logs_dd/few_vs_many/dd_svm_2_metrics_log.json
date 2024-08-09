@@ -1,0 +1,1 @@
+{"fold": 2, "val_accuracy": 1.0, "val_auc": 1.0, "val_f1": 1.0, "avg_sensitivity": 1.0, "avg_specificity": 1.0, "class_Few_sensitivity": 1.0, "class_Many_sensitivity": 1.0, "class_Few_specificity": 1.0, "class_Many_specificity": 1.0, "class_Few_f1": 1.0, "class_Many_f1": 1.0}

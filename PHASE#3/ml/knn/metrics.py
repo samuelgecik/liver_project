@@ -3,10 +3,10 @@ import os
 import json
 import seaborn as sns
 import numpy as np
-from sklearn.metrics import confusion_matrix, accuracy_score, roc_auc_score, f1_score
+from sklearn.metrics import confusion_matrix, accuracy_score, roc_auc_score, f1_score, cohen_kappa_score, balanced_accuracy_score
 
 
-def calculate_metrics(y_true, y_pred, y_prob):
+def calculate_metrics(y_true, y_pred, y_prob, num_classes=3):
     
     cm = confusion_matrix(y_true, y_pred)
 
@@ -36,14 +36,41 @@ def calculate_metrics(y_true, y_pred, y_prob):
     accuracy = accuracy_score(y_true, y_pred)
     
     # Calculate ROC-AUC and F1 score for validation set
-    auc = roc_auc_score(y_true, y_prob, multi_class='ovr', average='weighted')
-    f1 = f1_score(y_true, y_pred, average='weighted')
+    if num_classes == 2:
+        auc = roc_auc_score(y_true, y_prob[:, 1])
+        f1 = f1_score(y_true, y_pred)
+    else:
+        auc = roc_auc_score(y_true, y_prob, multi_class='ovr', average='weighted')
+        f1 = f1_score(y_true, y_pred, average='weighted')
     
     # Calculate averaged sensitivity and specificity
     avg_sensitivity = sum(sensitivities) / len(sensitivities) if sensitivities else 0
     avg_specificity = sum(specificities) / len(specificities) if specificities else 0
     
     return accuracy, metrics, auc, f1, cm, avg_sensitivity, avg_specificity
+
+def custom_scorer(y_true, y_pred):
+    # If y_pred is probabilities, convert to class predictions
+    if y_pred.ndim == 2:
+        y_pred_class = np.argmax(y_pred, axis=1)
+        auc = roc_auc_score(y_true, y_pred, average='macro', multi_class='ovo')
+        f1 = f1_score(y_true, y_pred_class, average='macro')
+    else:
+        y_pred_class = (y_pred > 0.5).astype(int)
+        auc = roc_auc_score(y_true, y_pred)
+        f1 = f1_score(y_true, y_pred_class, average='binary')
+
+    # ind = np.random.randint(0, len(y_true), 20)
+    # print(y_pred[ind])
+    # print(y_pred_class[ind])
+    # print(y_true[ind])
+
+    # Calculate metrics
+    kappa = cohen_kappa_score(y_true, y_pred_class)
+    balanced_acc = balanced_accuracy_score(y_true, y_pred_class)
+    
+    return 0.3 * auc + 0.3 * f1 + 0.2 * kappa + 0.2 * balanced_acc
+
 
 def calculate_double_dichotomy_auc(y_true, y_prob):
     """
@@ -75,18 +102,20 @@ def calculate_double_dichotomy_auc(y_true, y_prob):
         'auc_few_vs_many': auc_few_vs_many
     }
 
-def plot_confusion_matrix(cm, class_names, epoch_num=0, model_name='model', fold_num=0):
+def plot_confusion_matrix(cm, class_names, epoch_num=0, model_name='model', fold_num=0, save_dir='figures'):
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir, exist_ok=True)
     plt.figure(figsize=(10,8))
     sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=class_names, yticklabels=class_names)
     plt.title('Confusion Matrix')
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
-    plt.savefig(f'figures/confusion_matrix_{model_name}_epoch_{epoch_num}_fold{fold_num}.png')
+    plt.savefig(f'{save_dir}/confusion_matrix_{model_name}_epoch_{epoch_num}_fold{fold_num}.png')
     plt.close()
 
 def custom_log(metrics, model_name, log_dir='logs'):
     if not os.path.exists(log_dir):
-        os.makedirs(log_dir)
+        os.makedirs(log_dir, exist_ok=True)
     log_file = f'{log_dir}/{model_name}_metrics_log.json'
     with open(log_file, 'a') as f:
         f.write(json.dumps(metrics) + '\n')
