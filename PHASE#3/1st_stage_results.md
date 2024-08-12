@@ -1,5 +1,3 @@
-Certainly. I'll update the summary to include the F1 scores for each classifier. Here's the revised version with F1 scores included:
-
 # Comprehensive Summary: Three-Class Hepatocyte Ballooning Detection Using Machine Learning Algorithms
 
 ## 1. Project Overview
@@ -80,5 +78,3 @@ All classifiers excelled in binary classification tasks:
 
 ### 5.3 Clinical Potential
 - The high performance across various metrics, including class-specific F1 scores, suggests strong potential for clinical application, pending further validation.
-
-This stage of the project has demonstrated significant improvements in hepatocyte ballooning detection, successfully leveraging the strengths of both deep learning and traditional machine learning approaches. The consistent high performance across multiple classifiers and metrics provides a strong foundation for further refinement and potential clinical application.

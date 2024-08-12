@@ -1,5 +1,3 @@
-Here's the comprehensive analysis in Markdown format:
-
 # Comprehensive Analysis: Dual Dichotomy Approach for Hepatocyte Ballooning Detection
 
 ## 1. First Stage: Normal vs. Abnormal Classification
