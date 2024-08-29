@@ -1,0 +1,8 @@
+{
+    "weights": "distance",
+    "p": 2,
+    "n_neighbors": 11,
+    "metric": "manhattan",
+    "leaf_size": 10,
+    "algorithm": "brute"
+}
